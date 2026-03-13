@@ -15,7 +15,7 @@ removal scenario.
 
 ### Steps
 1. Clone the repository:
-   git clone [<your-repo-url>](https://github.com/yctang-kydon/angularjs-twitter-rubric.git)
+   git clone https://github.com/yctang-kydon/angularjs-twitter-rubric.git
 
 2. Navigate to the project folder:
    cd angularjs-twitter-rubric
@@ -59,7 +59,7 @@ followers are removed.
 
 ## Libraries Used
 
-- **AngularJS 1.6** — required for this tutorialgi
+- **AngularJS 1.6** — required for this tutorial
 - **Bootstrap 5** — provides consistent and familiar UI components 
   without custom CSS overhead
 - **Flatpickr** — used for the date picker to ensure cross-browser 
