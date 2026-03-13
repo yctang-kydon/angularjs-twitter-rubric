@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Mac system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
