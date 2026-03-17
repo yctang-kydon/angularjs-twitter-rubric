@@ -7,6 +7,9 @@ remove certain followers. The intent is to demonstrate how rubrics can be
 applied in a product context — specifically in a filtering, sorting, and 
 removal scenario.
 
+## Live Demo
+https://yctang-kydon.github.io/angularjs-twitter-rubric
+
 ## How to Run Locally
 
 ### Prerequisites
