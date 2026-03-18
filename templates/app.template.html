@@ -1,87 +1,100 @@
-<div class="container mt-5">
-  <h1>{{ $ctrl.title }}</h1>
-  <p>Followers loaded: {{ $ctrl.followers.length }}</p>
-    
-    <div class="mb-3">
-        <div class="d-flex flex-wrap align-items-center gap-2">
-        <strong>Joined Twitter Between</strong>
-        
-        <div class="d-flex flex-wrap align-items-center gap-1">
-            <input type="text" 
-                class="form-control w-auto"
-                flatpickr-input
-                ng-model="$ctrl.startDate"
-                ng-change="$ctrl.applyDateFilter()"
-                placeholder="Start Date">
-            <button class="btn btn-sm btn-outline-secondary" 
-                ng-click="$ctrl.clearDate('start')"
-                ng-if="$ctrl.startDate">✕</button>
+<!--- Header -->
+<div class="app-header">
+    <div class="container">
+        <h1><i class="bi bi-twitter-x"></i> {{ $ctrl.title }}</h1>
+        <p>Followers loaded: {{ $ctrl.followers.length }}</p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container my-4">
+
+    <!-- Filter Card-->
+    <div class="card mb-4 border-0 bg-light p-3">
+
+        <!-- Date Filters -->
+        <div class="mb-2">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <strong>Joined Twitter Between</strong>
+                <div class="d-flex flex-wrap align-items-center gap-1">
+                    <input type="text" 
+                        class="form-control w-auto"
+                        flatpickr-input
+                        ng-model="$ctrl.startDate"
+                        ng-change="$ctrl.applyDateFilter()"
+                        placeholder="Start Date">
+                    <button class="btn btn-sm btn-outline-secondary" 
+                        ng-click="$ctrl.clearDate('start')"
+                        ng-if="$ctrl.startDate">✕</button>
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center gap-1">
+                    <input type="text"
+                        class="form-control w-auto"
+                        flatpickr-input
+                        ng-model="$ctrl.endDate"
+                        ng-change="$ctrl.applyDateFilter()"
+                        placeholder="End Date">
+                    <button class="btn btn-sm btn-outline-secondary"
+                        ng-click="$ctrl.clearDate('end')"
+                        ng-if="$ctrl.endDate">✕</button>
+                </div>
+            </div>
         </div>
 
-        <div class="d-flex flex-wrap align-items-center gap-1">
-            <input type="text"
-                class="form-control w-auto"
-                flatpickr-input
-                ng-model="$ctrl.endDate"
-                ng-change="$ctrl.applyDateFilter()"
-                placeholder="End Date">
-            <button class="btn btn-sm btn-outline-secondary"
-                ng-click="$ctrl.clearDate('end')"
-                ng-if="$ctrl.endDate">✕</button>
+        <!-- Sort Field Filters -->
+        <div class="sort-buttons mb-3">
+            <strong>Sort By</strong>
+
+            <button class="btn btn-sm" 
+            ng-class="{
+                'btn-dark': $ctrl.sortField === 'total',
+                'btn-outline-dark': $ctrl.sortField !== 'total'}"
+            ng-click="$ctrl.sortBy('total')">Score
+            <span ng-if="$ctrl.sortField === 'total'">
+                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+            </span>
+            </button>
+
+            <button class="btn btn-sm"
+            ng-class="{
+                'btn-dark': $ctrl.sortField === 'friends',
+                'btn-outline-dark': $ctrl.sortField !== 'friends'}" 
+            ng-click="$ctrl.sortBy('friends')">Friends
+            <span ng-if="$ctrl.sortField === 'friends'">
+                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+            </span>
+            </button>
+            
+            <button class="btn btn-sm"
+            ng-class="{
+                'btn-dark': $ctrl.sortField === 'influence',
+                'btn-outline-dark': $ctrl.sortField !== 'influence'}" 
+            ng-click="$ctrl.sortBy('influence')">Influence
+            <span ng-if="$ctrl.sortField === 'influence'">
+                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+            </span>
+            </button>
+            
+            <button class="btn btn-sm" 
+            ng-class="{
+                'btn-dark': $ctrl.sortField === 'chirpiness',
+                'btn-outline-dark': $ctrl.sortField !== 'chirpiness'}"
+            ng-click="$ctrl.sortBy('chirpiness')" ng-disabled="$ctrl.isRangeOverSixMonths()">Chirpiness
+            <span ng-if="$ctrl.sortField === 'chirpiness'">
+                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+            </span>        
+            </button>
+
+            <!-- Sort Warning for Chirpiness -->
+            <div class="alert alert-warning mt-2" ng-if="$ctrl.isRangeOverSixMonths()">
+                Chirpiness cannot be sorted for date ranges longer than 6 months.
+            </div>
         </div>
 
-        </div>
     </div>
 
-    <div class="sort-buttons mb-3">
-        <strong>Sort By</strong>
-
-        <button class="btn btn-sm" 
-        ng-class="{
-            'btn-primary': $ctrl.sortField === 'total',
-            'btn-outline-primary': $ctrl.sortField !== 'total'}"
-        ng-click="$ctrl.sortBy('total')">Score
-        <span ng-if="$ctrl.sortField === 'total'">
-            {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
-        </span>
-        </button>
-
-        <button class="btn btn-sm"
-        ng-class="{
-            'btn-primary': $ctrl.sortField === 'friends',
-            'btn-outline-primary': $ctrl.sortField !== 'friends'}" 
-        ng-click="$ctrl.sortBy('friends')">Friends
-        <span ng-if="$ctrl.sortField === 'friends'">
-            {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
-        </span>
-        </button>
-        
-        <button class="btn btn-sm"
-        ng-class="{
-            'btn-primary': $ctrl.sortField === 'influence',
-            'btn-outline-primary': $ctrl.sortField !== 'influence'}" 
-        ng-click="$ctrl.sortBy('influence')">Influence
-        <span ng-if="$ctrl.sortField === 'influence'">
-            {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
-        </span>
-        </button>
-        
-        <button class="btn btn-sm" 
-        ng-class="{
-            'btn-primary': $ctrl.sortField === 'chirpiness',
-            'btn-outline-primary': $ctrl.sortField !== 'chirpiness'}"
-        ng-click="$ctrl.sortBy('chirpiness')" ng-disabled="$ctrl.isRangeOverSixMonths()">Chirpiness
-        <span ng-if="$ctrl.sortField === 'chirpiness'">
-            {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
-        </span>        
-        </button>
-
-        <div class="alert alert-warning mt-2" ng-if="$ctrl.isRangeOverSixMonths()">
-            Chirpiness cannot be sorted for date ranges longer than 6 months.
-        </div>
-
-    </div>
-
+    <!-- Followers Grid-->
     <div class="row">
         <div class="col-12 col-sm-6 col-lg-4" ng-repeat="follower in $ctrl.filteredFollowers">
             <follower-card

@@ -1,3 +1,30 @@
+/* === HEADER === */
+
+.app-header {
+    background: linear-gradient(135deg, #000000, #9d9d9d);
+    color: white;
+    padding: 1.5rem 0;
+}
+
+.app-header h1 {
+    color: white;
+    margin: 0;
+}
+
+.app-header p {
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+}
+
+/* === CARD === */
+
+.card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: none !important;
+}
+
+/* === SCORE CELLS === */
+
 .score-cell {
     padding: 0.5rem;
     text-align: center;
@@ -8,27 +35,49 @@
     border-right: none;
 }
 
-.score-value {
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-.card small {
+.score-cell small {
     font-size: 0.8rem;
     white-space: nowrap;
     display: block;
     margin-bottom: 0.25rem;
 }
 
+.score-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* === TOTAL SCORE CIRCLE === */
+
+.total-score {
+    background: #1a1a1a;
+    color: white;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* === BADGES === */
+
 .badge {
     font-size: 0.75rem;
     white-space: nowrap;
 }
 
+/* === DATE PICKER === */
+
 .flatpickr-input {
     min-width: 120px !important;
     max-width: 150px !important;
 }
+
+/* === SORT BUTTONS === */
 
 .sort-buttons {
     display: flex;

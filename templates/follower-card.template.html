@@ -1,9 +1,9 @@
 <div class="card mb-3">
 
     <!-- Card Header: Name and Total Score -->
-    <div class="card-header d-flex justify-content-between">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <strong>{{ $ctrl.follower.fullname }}</strong>
-        <span>{{ $ctrl.follower.twubric.total }}</span>
+        <div class="total-score">{{ $ctrl.follower.twubric.total }}</div>
     </div>
 
     <!-- Scores Row -->
