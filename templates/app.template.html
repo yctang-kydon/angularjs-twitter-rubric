@@ -3,30 +3,33 @@
   <p>Followers loaded: {{ $ctrl.followers.length }}</p>
     
     <div class="mb-3">
+        <div class="d-flex flex-wrap align-items-center gap-2">
         <strong>Joined Twitter Between</strong>
         
-        <div class="d-inline-block ms-2">
+        <div class="d-flex flex-wrap align-items-center gap-1">
             <input type="text" 
-                class="form-control d-inline-block w-auto"
+                class="form-control w-auto"
                 flatpickr-input
                 ng-model="$ctrl.startDate"
                 ng-change="$ctrl.applyDateFilter()"
                 placeholder="Start Date">
-            <button class="btn btn-sm btn-outline-secondary ms-1" 
+            <button class="btn btn-sm btn-outline-secondary" 
                 ng-click="$ctrl.clearDate('start')"
                 ng-if="$ctrl.startDate">✕</button>
         </div>
 
-        <div class="d-inline-block ms-2">
+        <div class="d-flex flex-wrap align-items-center gap-1">
             <input type="text"
-                class="form-control d-inline-block w-auto"
+                class="form-control w-auto"
                 flatpickr-input
                 ng-model="$ctrl.endDate"
                 ng-change="$ctrl.applyDateFilter()"
                 placeholder="End Date">
-            <button class="btn btn-sm btn-outline-secondary ms-1"
+            <button class="btn btn-sm btn-outline-secondary"
                 ng-click="$ctrl.clearDate('end')"
                 ng-if="$ctrl.endDate">✕</button>
+        </div>
+
         </div>
     </div>
 
@@ -79,7 +82,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4" ng-repeat="follower in $ctrl.filteredFollowers">
+        <div class="col-12 col-sm-6 col-lg-4" ng-repeat="follower in $ctrl.filteredFollowers">
             <follower-card
                 follower="follower"
                 sort-field="$ctrl.sortField"
@@ -87,7 +90,5 @@
             </follower-card>
         </div>
     </div>
-
-
 
 </div>

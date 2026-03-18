@@ -1,0 +1,31 @@
+.score-cell {
+    padding: 0.5rem;
+    text-align: center;
+    border-right: 1px solid #dee2e6;
+}
+
+.score-cell:last-child {
+    border-right: none;
+}
+
+.score-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.card small {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.badge {
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.flatpickr-input {
+    min-width: 120px !important;
+    max-width: 150px !important;
+}
