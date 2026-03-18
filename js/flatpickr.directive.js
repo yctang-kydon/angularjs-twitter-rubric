@@ -10,7 +10,7 @@ angular.module('twitterRubricApp')
                     altInput: true,
                     altFormat: 'j M Y',
                     onChange: function(selectedDates, dateStr) {
-                        scope.$apply(function() {
+                        scope.$applyAsync(function() {
                             ngModel.$setViewValue(dateStr);
                         });
                     }
@@ -21,7 +21,9 @@ angular.module('twitterRubricApp')
                     return ngModel.$modelValue;
                 }, function(newVal) {
                     if (!newVal) {
-                        fp.clear();
+                        setTimeout(function() {
+                            fp.clear();                            
+                        }, 0);
                     }
                 });
 
