@@ -13,8 +13,9 @@
                 <div class="score-value">{{ $ctrl.follower.twubric.friends }}</div>
                 <small>Friends</small>
                 <div>
-                    <span class="badge bg-secondary">
-                        {{ $ctrl.getLabel($ctrl.follower.twubric.friends, 2) }}
+                    <span class="badge"
+                        ng-class="$ctrl.getScoreInfo($ctrl.follower.twubric.friends, 2).badgeClass">
+                        {{ $ctrl.getScoreInfo($ctrl.follower.twubric.friends, 2).label }}
                     </span>
                 </div>
             </div>
@@ -22,8 +23,9 @@
                 <div class="score-value">{{ $ctrl.follower.twubric.influence }}</div>
                 <small>Influence</small>
                 <div>
-                    <span class="badge bg-secondary">
-                        {{ $ctrl.getLabel($ctrl.follower.twubric.influence, 4) }}
+                    <span class="badge"
+                        ng-class="$ctrl.getScoreInfo($ctrl.follower.twubric.influence, 4).badgeClass">
+                        {{ $ctrl.getScoreInfo($ctrl.follower.twubric.influence, 4).label }}
                     </span>
                 </div>
             </div>
@@ -31,8 +33,9 @@
                 <div class="score-value">{{ $ctrl.follower.twubric.chirpiness }}</div>
                 <small>Chirpiness</small>
                 <div>
-                    <span class="badge bg-secondary">
-                        {{ $ctrl.getLabel($ctrl.follower.twubric.chirpiness, 4) }}
+                    <span class="badge"
+                        ng-class="$ctrl.getScoreInfo($ctrl.follower.twubric.chirpiness, 4).badgeClass">
+                        {{ $ctrl.getScoreInfo($ctrl.follower.twubric.chirpiness, 4).label }}
                     </span>
                 </div>
             </div>

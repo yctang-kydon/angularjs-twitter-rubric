@@ -28,6 +28,13 @@ function FollowerCardController() {
             const label = $ctrl.getLabel($ctrl.follower.twubric.chirpiness, 4);
             return $ctrl.sortField === 'chirpiness' && label === 'High';
         };
+
+        $ctrl.getScoreInfo = function(score, max) {
+            const label = $ctrl.getLabel(score, max);
+            if (label === 'High') return {label, badgeClass: 'bg-success'};
+            if (label === 'Average') return {label, badgeClass: 'bg-warning text-dark'};
+            return {label, badgeClass: 'bg-secondary'};
+        };
     };
 }
 
