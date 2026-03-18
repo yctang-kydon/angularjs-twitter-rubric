@@ -33,9 +33,10 @@
         </div>
     </div>
 
-    <div class="mb-3">
+    <div class="sort-buttons mb-3">
         <strong>Sort By</strong>
-        <button class="btn btn-sm ms-2" 
+
+        <button class="btn btn-sm" 
         ng-class="{
             'btn-primary': $ctrl.sortField === 'total',
             'btn-outline-primary': $ctrl.sortField !== 'total'}"
@@ -45,7 +46,7 @@
         </span>
         </button>
 
-        <button class="btn btn-sm ms-2"
+        <button class="btn btn-sm"
         ng-class="{
             'btn-primary': $ctrl.sortField === 'friends',
             'btn-outline-primary': $ctrl.sortField !== 'friends'}" 
@@ -55,7 +56,7 @@
         </span>
         </button>
         
-        <button class="btn btn-sm ms-2"
+        <button class="btn btn-sm"
         ng-class="{
             'btn-primary': $ctrl.sortField === 'influence',
             'btn-outline-primary': $ctrl.sortField !== 'influence'}" 
@@ -65,7 +66,7 @@
         </span>
         </button>
         
-        <button class="btn btn-sm ms-2" 
+        <button class="btn btn-sm" 
         ng-class="{
             'btn-primary': $ctrl.sortField === 'chirpiness',
             'btn-outline-primary': $ctrl.sortField !== 'chirpiness'}"

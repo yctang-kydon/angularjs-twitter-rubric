@@ -29,3 +29,11 @@
     min-width: 120px !important;
     max-width: 150px !important;
 }
+
+.sort-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+}
