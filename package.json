@@ -1,10 +1,26 @@
 {
+  "name": "angularjs-twitter-rubric",
+  "type": "module",
+  "version": "1.0.0",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint js/*.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.3",
-    "globals": "^17.4.0"
+    "globals": "^17.4.0",
+    "vite": "^8.0.3"
+  },
+  "dependencies": {
+    "angular": "1.7.9",
+    "angular-animate": "1.7.9",
+    "angular-aria": "1.7.9",
+    "angular-material": "1.1.26",
+    "angular-messages": "1.7.9",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1"
   }
 }

@@ -1,3 +1,5 @@
+import angular from 'angular';
+
 angular.module('twitterRubricApp')
     .component('followerCard', {
         templateUrl: 'templates/follower-card.template.html',
@@ -12,29 +14,55 @@ angular.module('twitterRubricApp')
 function FollowerCardController() {
     const $ctrl = this;
 
-    $ctrl.$onInit = function() {
-        $ctrl.remove = function() {
-            $ctrl.onRemove({ follower: $ctrl.follower });
-        };
+    // --- STATE --- 
+    // Precomputed Score Metadata - set once in $onChanges
+    $ctrl.scores = null;
 
-        $ctrl.getLabel = function(score, max) {
-            const ratio = score / max;
-            if (ratio > 0.66) return 'High';
-            if (ratio > 0.33) return 'Average';
-            return 'Low';
-        };
+    // --- LIFECYCLE ---
 
-        $ctrl.isRemoveDisabled = function() {
-            const label = $ctrl.getLabel($ctrl.follower.twubric.chirpiness, 4);
-            return $ctrl.sortField === 'chirpiness' && label === 'High';
-        };
-
-        $ctrl.getScoreInfo = function(score, max) {
-            const label = $ctrl.getLabel(score, max);
-            if (label === 'High') return {label, badgeClass: 'bg-success'};
-            if (label === 'Average') return {label, badgeClass: 'bg-warning text-dark'};
-            return {label, badgeClass: 'bg-secondary'};
-        };
+    $ctrl.$onChanges = (changes) => {
+        if (changes.follower && changes.follower.currentValue) {
+            $ctrl.scores = _computeScores($ctrl.follower);
+        }
     };
+
+    $ctrl.$onDestroy = () => {
+        // placeholder for future cleanup
+    };
+
+    // --- METHODS ---
+
+    $ctrl.remove = () => {
+        $ctrl.onRemove({ follower: $ctrl.follower });
+    };
+        
+    $ctrl.isRemoveDisabled = () => {
+        return $ctrl.sortField === 'chirpiness' &&
+                $ctrl.scores && $ctrl.scores.chirpiness.label === 'High';
+    };
+
+    // --- PRIVATE HELPERS ---
+
+    function _computeScores(follower) {
+        return {
+            friends: _scoreInfo(follower.twubric.friends, 2),
+            influence: _scoreInfo(follower.twubric.influence, 4),
+            chirpiness: _scoreInfo(follower.twubric.chirpiness, 4)
+        };
+    }
+
+    let _callCount = 0;
+
+    function _scoreInfo(score, max) {
+        _callCount++;
+        // eslint-disable-nextline no-console
+        console.log(`_scoreInfo call #${_callCount}`);
+
+        const ratio = score / max;
+        const label = ratio > 0.66 ? 'High' : ratio > 0.33 ? 'Average' : 'Low';
+        const badgeClass = label === 'High' ? 'bg-success' :
+            label === 'Average' ? 'bg-warning text-dark' : 'bg-secondary';
+        return {label, badgeClass}; 
+    }
 }
 

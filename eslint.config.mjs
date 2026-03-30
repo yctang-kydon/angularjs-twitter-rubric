@@ -11,7 +11,6 @@ export default defineConfig([
             globals: {
                 ...globals.browser,
                 angular: "readonly",
-                flatpickr: "readonly"
             }
         },
         rules: {
@@ -22,8 +21,12 @@ export default defineConfig([
             "indent": ["error", 4]
         }
     },
+    { 
+        files: ["vite.config.js", "eslint.config.mjs"],
+        languageOptions: { sourceType: "module" }
+    },
     {
         files: ["**/*.js"],
-        languageOptions: { sourceType: "script" }
+        languageOptions: { sourceType: "module" }
     }
 ]);

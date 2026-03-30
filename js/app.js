@@ -1,13 +1,20 @@
-const app = angular.module('twitterRubricApp', []);
+import angular from 'angular';
+
+const app = angular.module('twitterRubricApp', [
+    'ngMaterial',
+    'ngAnimate',
+    'ngAria',
+    'ngMessages'
+]);
 
 // Date Filter
-app.filter('unixDate', function() {
-    return function(timestamp) {
+app.filter('unixDate', () => {
+    return (timestamp) => {
         if (!timestamp) return '';
         const date = new Date(timestamp * 1000);
         return date.toLocaleDateString('en-GB', {
             day: 'numeric',
-            month: 'short',
+            month: 'numeric',
             year: 'numeric'
         });
     };
@@ -19,70 +26,78 @@ app.component('rubricApp', {
     controller: AppController
 });
 
-AppController.$inject = ['$http'];
-function AppController($http) {
+AppController.$inject = ['$http', '$log'];
+function AppController($http, $log) {
     // ViewModel pattern - using 'this' to refer to the controller instance
     const $ctrl = this; 
 
+    // --- STATE ---
     $ctrl.title = 'Twitter Rubric';
-    // database of followers
     $ctrl.followers = [];
-    // filtered list of followers to display
     $ctrl.filteredFollowers =[];
+    $ctrl.errorMessage = null;
+    $ctrl.isLoading = false;
 
+    // --- FILTER STATE ---
     $ctrl.startDate = null;
     $ctrl.endDate = null;
+
+    // --- SORT STATE ---
     $ctrl.sortField = null;
     $ctrl.sortAscending = true;
 
-    // Lifecycle Hook - Called when the component is initialized
-    $ctrl.$onInit = function() {
-        $http.get('data/twubric.json').then(function(response){
+    // --- CONFIG: SORT OPTIONS ---
+    $ctrl.sortOptions = [
+        {field: 'total', label: 'Score'},
+        {field: 'friends', label: 'Friends'},
+        {field: 'influence', label: 'Influence'},
+        {field: 'chirpiness', label: 'Chirpiness'}
+    ];
+
+    // --- LIFECYCLE HOOK ---
+    $ctrl.$onInit = () => {
+        $ctrl.isLoading = true;
+
+        $http.get('data/twubric.json').then((response) => {
             $ctrl.followers = response.data; 
-            // show all by default
-            $ctrl.filteredFollowers = $ctrl.followers;
+            _derive();
+        }).catch((error) => {
+            $log.error('Failed to load followers:', error);
+            $ctrl.errorMessage = 'Failed to load followers data. Please check your connection and try again.';
+        }).finally(() => {
+            $ctrl.isLoading = false;
         });
     };
+
+    $ctrl.$onDestroy = () => {
+        // placeholder code to cleanup scope
+    }; 
+
+    // --- METHODS (USER ACTIONS) ---
 
     // Remove a follower from the array
-    $ctrl.removeFollower = function(follower) {
-        $ctrl.followers = $ctrl.followers.filter(function(f) {
-            return f.uid !== follower.uid;
-        });
-        $ctrl.filteredFollowers = $ctrl.filteredFollowers.filter(function(f) {
-            return f.uid !== follower.uid;
-        });
+    $ctrl.removeFollower = (follower) => {
+        $ctrl.followers = $ctrl.followers.filter(f => f.uid !== follower.uid);
+        _derive();
     };
 
-    $ctrl.applyDateFilter = function() {
-        if ($ctrl.isRangeOverSixMonths() && $ctrl.sortField === 'chirpiness') {
-            $ctrl.sortField = null;
-            $ctrl.sortAscending = true;
-        }
-
-        if (!$ctrl.startDate || !$ctrl.endDate) {
-            $ctrl.filteredFollowers = $ctrl.followers;
-            return;
-        }
-
-        const start = new Date($ctrl.startDate).getTime() / 1000;
-        const end = new Date($ctrl.endDate).getTime() / 1000;
-        $ctrl.filteredFollowers = $ctrl.followers.filter(function(follower) {
-            return follower.join_date >= start && follower.join_date <= end;
-        });
-    };
-
-    $ctrl.clearDate = function(which) {
+    // Clear date(s) selected
+    $ctrl.clearDate = (which) => {
         if (which === 'start') {
             $ctrl.startDate = null;
         } else {
             $ctrl.endDate = null;
         }
-        $ctrl.applyDateFilter();
+        _derive();
     };
-        
+
+    // Apply date filter
+    $ctrl.applyDateFilter = () => {
+        _derive();
+    };
+
     // Sort followers by a specific field
-    $ctrl.sortBy = function(field) {
+    $ctrl.sortBy = (field) => {
         if ($ctrl.sortField === field) {
             // Same field clicked - toggle direction
             $ctrl.sortAscending = !$ctrl.sortAscending;
@@ -90,30 +105,83 @@ function AppController($http) {
             $ctrl.sortField = field;
             $ctrl.sortAscending = true;
         }
+        _derive();
+    }; 
 
-        $ctrl.filteredFollowers.sort(function(a, b) {
-            const valA = a.twubric[field];
-            const valB = b.twubric[field];
-            if ($ctrl.sortAscending) {
-                return valA - valB;
-            } else {
-                return valB - valA;
-            }
-        });
+    // Reset sort fields
+    $ctrl.resetSort = () => {
+        $ctrl.sortField = null; 
+        $ctrl.sortAscending = true;
+        // reapply date filter to restore original order
+        _derive();
     };
 
-    // Disable chirpiness sorting if date range > 6 months
-    $ctrl.isRangeOverSixMonths = function() {
+
+    // --- STATE CHECKS ---
+
+    // Check if date range > 6 months
+    $ctrl.isRangeOverSixMonths = () => {
         // If either date is missing, we can't determine the range, so return false
         if (!$ctrl.startDate || !$ctrl.endDate) return false;
+        if ($ctrl.endDate <= $ctrl.startDate) return false;
 
-        const start = new Date($ctrl.startDate);
-        const end = new Date($ctrl.endDate);
-
-        // Only true if end is after start AND range > 6 months
-        if (end <= start) return false; 
-
-        const sixMonthsMs = 6 * 30 * 24 * 60 * 60 * 1000;
-        return (end - start) > sixMonthsMs;
+        const sixMonthsLater = new Date($ctrl.startDate);
+        sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
+        return $ctrl.endDate > sixMonthsLater;
     };
+
+    // Check if no followers are shown
+    $ctrl.isEmpty = () => {
+        return $ctrl.filteredFollowers.length === 0;
+    };
+
+    // Sort buttons disabled on specific conditions
+    $ctrl.isSortDisabled = (field) => {
+        if ($ctrl.isEmpty()) return true;
+        if (field === 'chirpiness') return $ctrl.isRangeOverSixMonths();
+        return false;
+    };
+
+    // --- COMPUTED PROPERTY ---
+    // Returns true when any filter is current active
+    $ctrl.isFiltered = () => {
+        return $ctrl.startDate !== null || $ctrl.endDate !== null;
+    };
+
+    // --- PRIVATE HELPERS: PURE FUNCTIONS ---
+
+    function _derive() {
+        let result = _applyDateFilter($ctrl.followers);
+        result = _applySort(result);
+
+        if ($ctrl.isRangeOverSixMonths() && $ctrl.sortField === 'chirpiness') {
+            $ctrl.sortField = null;
+            $ctrl.sortAscending = true;
+            result = _applySort($ctrl.followers);
+        }
+        $ctrl.filteredFollowers = result;
+    
+    }
+
+    function _applyDateFilter(list) {
+        return list.filter((follower) => {
+            const joinDate = new Date(follower.join_date * 1000);
+            // start date - show followers who joined FROM this date
+            if ($ctrl.startDate && joinDate < $ctrl.startDate) return false;
+            // end date - show followers who joined UP TO this date
+            if ($ctrl.endDate && joinDate > $ctrl.endDate) return false;
+            return true;
+        });
+    }
+
+    function _applySort(list) {
+        if (!$ctrl.sortField) return list;
+
+        return list.slice().sort((a, b) => {
+            const valA = a.twubric[$ctrl.sortField];
+            const valB = b.twubric[$ctrl.sortField];
+            return $ctrl.sortAscending ? valA - valB : valB - valA;
+        });
+    }
+
 }
