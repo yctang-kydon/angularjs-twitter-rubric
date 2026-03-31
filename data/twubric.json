@@ -1,0 +1,132 @@
+[
+  {
+    "uid": 1,
+    "username": "jimhensen1",
+    "image": "https://randomuser.me/api/portraits/men/1.jpg",
+    "fullname": "Jim Hensen",
+    "twubric": {
+      "total": 3.5,
+      "friends": 1,
+      "influence": 1,
+      "chirpiness": 1.5
+    },
+    "join_date": 1358899200
+  },
+  {
+    "uid": 2,
+    "username": "roxyfoxx2",
+    "image": "https://randomuser.me/api/portraits/women/2.jpg",
+    "fullname": "Roxy Foxx",
+    "twubric": {
+      "total": 5,
+      "friends": 1,
+      "influence": 1,
+      "chirpiness": 1.5
+    },
+    "join_date": 1355270400
+  },
+  {
+    "uid": 3,
+    "username": "rumihunter3",
+    "image": "https://randomuser.me/api/portraits/women/3.jpg",
+    "fullname": "Rumi Jang",
+    "twubric": {
+      "total": 7,
+      "friends": 1,
+      "influence": 1,
+      "chirpiness": 1.5
+    },
+    "join_date": 1289433600
+  },
+  {
+    "uid": 4,
+    "username": "jinudemon4",
+    "image": "https://randomuser.me/api/portraits/men/4.jpg",
+    "fullname": "Jinu Kang",
+    "twubric": {
+      "total": 9,
+      "friends": 2,
+      "influence": 3,
+      "chirpiness": 4
+    },
+    "join_date": 1300838400
+  },
+  {
+    "uid": 5,
+    "username": "mysterydemon5",
+    "image": "https://randomuser.me/api/portraits/men/5.jpg",
+    "fullname": "Mystery Man",
+    "twubric": {
+      "total": 9,
+      "friends": 1,
+      "influence": 4,
+      "chirpiness": 4
+    },
+    "join_date": 1230768000
+  },
+  {
+    "uid": 6,
+    "username": "abbydemon6",
+    "image": "https://randomuser.me/api/portraits/men/6.jpg",
+    "fullname": "Abby Chan",
+    "twubric": {
+      "total": 6,
+      "friends": 2,
+      "influence": 3,
+      "chirpiness": 1
+    },
+    "join_date": 1252454400
+  },
+  {
+    "uid": 7,
+    "username": "zoeyhunter7",
+    "image": "https://randomuser.me/api/portraits/women/7.jpg",
+    "fullname": "Zoey Choi",
+    "twubric": {
+      "total": 8,
+      "friends": 2,
+      "influence": 4,
+      "chirpiness": 2
+    },
+    "join_date": 1278201600
+  },
+  {
+    "uid": 8,
+    "username": "mirahunter8",
+    "image": "https://randomuser.me/api/portraits/women/8.jpg",
+    "fullname": "Mira Lee",
+    "twubric": {
+      "total": 7,
+      "friends": 2,
+      "influence": 3,
+      "chirpiness": 2
+    },
+    "join_date": 1331510400
+  },
+  {
+    "uid": 9,
+    "username": "romancedemon9",
+    "image": "https://randomuser.me/api/portraits/men/9.jpg",
+    "fullname": "Romance Boy",
+    "twubric": {
+      "total": 8,
+      "friends": 1,
+      "influence": 4,
+      "chirpiness": 3
+    },
+    "join_date": 1367971200
+  },
+  {
+    "uid": 10,
+    "username": "bobby10",
+    "image": "https://randomuser.me/api/portraits/men/10.jpg",
+    "fullname": "Bobby Kim",
+    "twubric": {
+      "total": 5,
+      "friends": 1,
+      "influence": 1,
+      "chirpiness": 3
+    },
+    "join_date": 1228953600
+  }
+]

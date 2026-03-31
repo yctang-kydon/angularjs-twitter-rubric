@@ -1,0 +1,220 @@
+<!-- Nav Drawer Backdrop (Desktop) -->
+<div class="nav-backdrop"
+    ng-if="$ctrl.menuOpen"
+    ng-click="$ctrl.closeMenu()">
+</div>
+
+<!-- Nav Drawer -->
+<nav class="nav-drawer" ng-class="{'nav-drawer--open': $ctrl.menuOpen}">
+    
+    <!-- Drawer Header: Avatar, Name and Close Button-->
+     <div class="nav-drawer__header">
+        <div class="nav-drawer__avatar">TK</div>
+        <div class="nav-drawer__identity">
+            <p class="nav-drawer__name">TeamieKydon</p>
+            <p class="nav-drawer__handle">@TeamieKydon</p>
+        </div>
+        <button class="nav-drawer__close"
+            ng-click="$ctrl.closeMenu()"
+            aria-label="Close menu">
+            <i class="bi bi-x-lg"></i>
+        </button>
+     </div>
+
+    <!-- Nav Links -->
+    <ul class="nav-drawer__links">
+        <li class="nav-drawer__item">
+            <i class="bi bi-person nav-drawer__icon"></i>
+            <span>Profile</span>
+        </li>
+        <li class="nav-drawer__item">
+            <i class="bi bi-gear nav-drawer__icon"></i>
+            <span>Settings</span>
+        </li>
+        <li class="nav-drawer__item">
+            <i class="bi bi-newspaper nav-drawer__icon"></i>
+            <span>Feed</span>
+        </li>
+    </ul>
+
+    <div class="nav-drawer__divider"></div>
+
+    <ul class="nav-drawer__links">
+        <li class="nav-drawer__item nav-drawer__item--danger">
+            <i class="bi bi-box-arrow-left nav-drawer__icon"></i>
+            <span>Log out</span>
+        </li>
+    </ul>
+
+</nav>
+
+<!--- App Header -->
+<div class="app-header">
+    <div class="app-header__banner">
+        <!-- Hamburger menu icon-->
+         <button class="app-header__menu"
+            ng-click="$ctrl.toggleMenu()"
+            aria-label="Open navigation menu"
+            aria-expanded="{{ $ctrl.menuOpen}}">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+    <div class="app-header__profile">
+        <div class="app-header__avatar">TK</div>
+        <div class="app-header__info">
+            <h1 class="app-header__name">TeamieKydon</h1>
+            <p class="app-header__handle">@TeamieKydon</p>
+            <div class="app-header__stats">
+                <span class="app-header__stat" ng-if="$ctrl.isLoading">
+                    Loading...
+                </span>
+                <span class="app-header__stat"
+                    ng-if="!$ctrl.isLoading && !$ctrl.isFiltered()">
+                    <strong>{{ $ctrl.followers.length }}</strong> followers
+                </span>
+                <span class="app-header__stat"
+                    ng-if="!$ctrl.isLoading && $ctrl.isFiltered()">
+                    Showing <strong>{{ $ctrl.filteredFollowers.length }}</strong>
+                    of <strong>{{ $ctrl.followers.length }}</strong> followers
+                </span>
+            </div>
+        </div>
+    </div>
+    <div ng-if="$ctrl.errorMessage"
+        style="background:#c0392b; color:white; padding:0.5rem 1.5rem; font-size:0.85rem;">
+        {{ $ctrl.errorMessage }}
+    </div>
+</div>
+
+<!-- Main Content -->
+
+<!-- Filter Card-->
+<div class="filter-section">
+
+    <!-- Mobile-only Toggle Bar-->
+    <div class="filter-toggle-bar">
+        <button class="filter-toggle-btn"
+            ng-click="$ctrl.toggleFilters()"
+            aria-expanded="{{ $ctrl.filtersOpen }}">
+            <i class="bi bi-funnel"
+                ng-class="{'bi-full-fill': $ctrl.isFiltered() || $ctrl.sortField}"></i>
+            <span>Filters &amp; Sort</span>
+            <span class="filter-toggle-btn__badge"
+                ng-if="$ctrl.isFiltered() || $ctrl.sortField">
+                active
+            </span>
+            <i class="bi filter-toggle-btn__chevron"
+                ng-class="$ctrl.filtersOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        </button>
+    </div>
+
+    <!--- Filter Rows (Visible on Desktop, Collapsible on Mobile) -->
+    <div class="filter-collapsible" ng-show="$ctrl.filtersOpen">
+
+        <!-- Date Filters -->
+        <div class="filter-row">
+            <span class="filter-row__label">Joined between</span>
+
+            <div class="date-pill-wrap">
+                <md-datepicker
+                    ng-model="$ctrl.startDate"
+                    ng-change="$ctrl.applyDateFilter()"
+                    md-placeholder="Start Date">
+                </md-datepicker>
+                <button class="date-clear-btn"
+                    ng-if="$ctrl.startDate"
+                    ng-click="$ctrl.clearDate('start')">x</button>
+            </div>
+
+            <div class="date-pill-wrap">
+                <md-datepicker
+                    ng-model="$ctrl.endDate"
+                    ng-change="$ctrl.applyDateFilter()"
+                    md-placeholder="End Date">
+                </md-datepicker>
+                <button class="date-clear-btn"
+                    ng-if="$ctrl.endDate"
+                    ng-click="$ctrl.clearDate('end')">x</button>
+            </div>
+
+        </div>
+
+        <!-- Sort Field Filters -->
+        <div class="filter-row">
+            <span class="filter-row__label">Sort By</span>
+
+            <button class="sort-pill"
+            ng-repeat="option in $ctrl.sortOptions"
+            ng-class="{'sort-pill--active': $ctrl.sortField === option.field}"
+            ng-click="$ctrl.sortBy(option.field)"
+            ng-disabled="$ctrl.isSortDisabled(option.field)">
+            {{ option.field }}
+            <span ng-if="$ctrl.sortField === option.field">
+                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+            </span>
+            </button>
+
+            <!-- Reset Sort button — only shown when a sort is active -->
+            <button class="sort-pill sort-pill--reset"
+                ng-if="$ctrl.sortField"
+                ng-click="$ctrl.resetSort()">
+                ↺ Reset
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Sort Warning for Chirpiness -->
+<div class="chirpiness-warning" 
+    ng-if="$ctrl.isRangeOverSixMonths()">
+    Chirpiness cannot be sorted for date ranges longer than 6 months.
+</div>
+
+<!-- Followers Result Bar -->
+ <div class="result-bar" ng-if="!$ctrl.isEmpty() && !$ctrl.isLoading">
+    <span ng-if="!$ctrl.isFiltered()">
+        {{ $ctrl.followers.length }} followers
+    </span>
+    <span ng-if="$ctrl.isFiltered()">
+        {{ $ctrl.filteredFollowers.length }} of {{ $ctrl.followers.length }} followers
+    </span>
+ </div>
+
+<!-- Empty state -->
+<div class="empty-state" 
+    ng-if="$ctrl.isEmpty() && !$ctrl.isLoading && $ctrl.emptyReason === 'filtered'">
+    <div class="empty-state__icon">
+        <i class="bi bi-calendar-x"></i>
+    </div>
+    <p class="empty-state__text">No followers match the selected date range.</p>
+    <p class="empty-state__text" style="font-size:0.8rem; color:#bbb; margin-top:0.25rem;">
+        Try widening the date range or clearing the filter.
+    </p>
+</div>
+
+<div class="empty-state" 
+    ng-if="$ctrl.isEmpty() && !ctrl.isLoading && $ctrl.emptyReason === 'removed'">
+    <div class="empty-state__icon">
+        <i class="bi bi-people"></i>
+    </div>
+    <p class="empty-state__text">No followers remaining.</p>
+    <p class="empty-state__text" style="font-size:0.8rem; color:#bbb; margin-top:0.25rem;">
+        All followers have been removed from your list.
+    </p>
+</div>
+
+<!-- Followers Grid-->
+<div class="followers-grid" ng-if="!$ctrl.isEmpty()">
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4 follower-card-wrap" 
+            ng-repeat="follower in $ctrl.filteredFollowers track by follower.uid">
+            <follower-card
+                follower="follower"
+                sort-field="$ctrl.sortField"
+                on-remove="$ctrl.removeFollower(follower)">
+            </follower-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="follower-card">
+
+    <!-- Banner — portrait photo or gradient fallback -->
+    <div class="follower-card__banner">
+        <div class="follower-card__score">
+            <span class="follower-card__score-label-tiny">Score</span>
+            {{ $ctrl.follower.twubric.total }}
+        </div>
+    </div>
+
+    <!-- Identity — avatar overlapping banner -->
+    <div class="follower-card__identity">
+        <div class="follower-card__avatar">
+            <img
+                ng-if="!$ctrl.imageError"
+                ng-src="{{ $ctrl.follower.image }}"
+                alt="{{ $ctrl.follower.fullname }}">
+            <div
+                ng-if="$ctrl.imageError"
+                class="follower-card__avatar-fallback">
+                {{ $ctrl.follower.fullname.charAt(0) }}
+            </div>
+        </div>
+        <div class="follower-card__names">
+            <div class="follower-card__name">
+                {{ $ctrl.follower.fullname }}
+            </div>
+            <div class="follower-card__handle">
+                @{{ $ctrl.follower.username }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Score cells -->
+    <div class="follower-card__scores" ng-if="$ctrl.scores">
+        <div class="follower-card__score-cell">
+            <div class="follower-card__score-value">
+                {{ $ctrl.follower.twubric.friends }}
+            </div>
+            <small class="follower-card__score-label">Friends</small>
+            <span class="score-badge"
+                ng-class="$ctrl.scores.friends.badgeClass">
+                {{ $ctrl.scores.friends.label }}
+            </span>
+        </div>
+        <div class="follower-card__score-cell">
+            <div class="follower-card__score-value">
+                {{ $ctrl.follower.twubric.influence }}
+            </div>
+            <small class="follower-card__score-label">Influence</small>
+            <span class="score-badge"
+                ng-class="$ctrl.scores.influence.badgeClass">
+                {{ $ctrl.scores.influence.label }}
+            </span>
+        </div>
+        <div class="follower-card__score-cell">
+            <div class="follower-card__score-value">
+                {{ $ctrl.follower.twubric.chirpiness }}
+            </div>
+            <small class="follower-card__score-label">Chirpiness</small>
+            <span class="score-badge"
+                ng-class="$ctrl.scores.chirpiness.badgeClass">
+                {{ $ctrl.scores.chirpiness.label }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="follower-card__footer">
+        <span class="follower-card__date">
+            {{ $ctrl.follower.join_date | unixDate }}
+        </span>
+        <button
+            class="follower-card__remove"
+            ng-click="$ctrl.initiateRemove($event)"
+            ng-disabled="$ctrl.isRemoveDisabled()"
+            title="Remove follower">
+            <i class="bi bi-trash3"></i>
+        </button>
+    </div>
+
+</div>
