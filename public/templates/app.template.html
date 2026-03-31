@@ -97,7 +97,7 @@
             ng-click="$ctrl.toggleFilters()"
             aria-expanded="{{ $ctrl.filtersOpen }}">
             <i class="bi bi-funnel"
-                ng-class="{'bi-full-fill': $ctrl.isFiltered() || $ctrl.sortField}"></i>
+                ng-class="{'bi-funnel-fill': $ctrl.isFiltered() || $ctrl.sortField}"></i>
             <span>Filters &amp; Sort</span>
             <span class="filter-toggle-btn__badge"
                 ng-if="$ctrl.isFiltered() || $ctrl.sortField">
@@ -148,7 +148,7 @@
             ng-class="{'sort-pill--active': $ctrl.sortField === option.field}"
             ng-click="$ctrl.sortBy(option.field)"
             ng-disabled="$ctrl.isSortDisabled(option.field)">
-            {{ option.field }}
+            {{ option.label }}
             <span ng-if="$ctrl.sortField === option.field">
                 {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
             </span>
@@ -182,6 +182,12 @@
     </span>
  </div>
 
+<!-- Loading Spinner -->
+<div class="loading-state" ng-if="$ctrl.isLoading">
+    <div class="loading-spinner"></div>
+    <p class="loading-state__text">Loading followers...</p>
+</div>
+
 <!-- Empty state -->
 <div class="empty-state" 
     ng-if="$ctrl.isEmpty() && !$ctrl.isLoading && $ctrl.emptyReason === 'filtered'">
@@ -195,7 +201,7 @@
 </div>
 
 <div class="empty-state" 
-    ng-if="$ctrl.isEmpty() && !ctrl.isLoading && $ctrl.emptyReason === 'removed'">
+    ng-if="$ctrl.isEmpty() && !$ctrl.isLoading && $ctrl.emptyReason === 'removed'">
     <div class="empty-state__icon">
         <i class="bi bi-people"></i>
     </div>

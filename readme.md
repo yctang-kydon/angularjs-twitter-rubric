@@ -49,6 +49,17 @@ https://yctang-kydon.github.io/angularjs-twitter-rubric/
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint across all JS files |
 
+### Testing the loading state
+ 
+The app loads follower data from a local JSON file, so under normal conditions the loading spinner appears only briefly. To observe it clearly:
+ 
+1. Open Chrome DevTools (`F12` or `Cmd+Option+I`)
+2. Go to the **Network** tab
+3. Change the throttling dropdown from **"No throttling"** to **"Slow 3G"**
+4. Hard refresh the page (`Cmd+Shift+R` on Mac, `Ctrl+Shift+R` on Windows)
+ 
+The spinner will be visible for several seconds before the follower cards load in. Remember to set throttling back to **"No throttling"** when done — it affects all network requests in that tab.
+ 
 ## Deployment
 
 This project is deployed to GitHub Pages via a GitHub Actions workflow defined in `.github/workflows/deploy.yml`. Every push to the `main` branch automatically triggers a Vite production build and deploys the output to the `gh-pages` branch, which GitHub Pages serves as the live site.

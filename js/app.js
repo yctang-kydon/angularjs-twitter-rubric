@@ -89,8 +89,9 @@ function AppController($http, $log, $document, $scope, $window) {
     };
 
     $ctrl.$onDestroy = () => {
-        // Deregister the document listener to prevent leakage
+        // Deregister the document listener and event listener to prevent leakage
         $document.off('click', _onOutsideClick);
+        $window.removeEventListener('resize', _onResize);
     }; 
 
     // --- METHODS (USER ACTIONS) ---
