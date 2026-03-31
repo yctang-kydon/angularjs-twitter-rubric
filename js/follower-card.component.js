@@ -75,13 +75,7 @@ function FollowerCardController($mdDialog) {
         };
     }
 
-    let _callCount = 0;
-
     function _scoreInfo(score, max) {
-        _callCount++;
-        // eslint-disable-nextline no-console
-        console.log(`_scoreInfo call #${_callCount}`);
-
         const ratio = score / max;
         const label = ratio > 0.66 ? 'High' : ratio > 0.33 ? 'Average' : 'Low';
         const badgeClass = label === 'High' ? 'score-badge--high' :

@@ -1,6 +1,64 @@
-<!--- Header -->
+<!-- Nav Drawer Backdrop (Desktop) -->
+<div class="nav-backdrop"
+    ng-if="$ctrl.menuOpen"
+    ng-click="$ctrl.closeMenu()">
+</div>
+
+<!-- Nav Drawer -->
+<nav class="nav-drawer" ng-class="{'nav-drawer--open': $ctrl.menuOpen}">
+    
+    <!-- Drawer Header: Avatar, Name and Close Button-->
+     <div class="nav-drawer__header">
+        <div class="nav-drawer__avatar">TK</div>
+        <div class="nav-drawer__identity">
+            <p class="nav-drawer__name">TeamieKydon</p>
+            <p class="nav-drawer__handle">@TeamieKydon</p>
+        </div>
+        <button class="nav-drawer__close"
+            ng-click="$ctrl.closeMenu()"
+            aria-label="Close menu">
+            <i class="bi bi-x-lg"></i>
+        </button>
+     </div>
+
+    <!-- Nav Links -->
+    <ul class="nav-drawer__links">
+        <li class="nav-drawer__item">
+            <i class="bi bi-person nav-drawer__icon"></i>
+            <span>Profile</span>
+        </li>
+        <li class="nav-drawer__item">
+            <i class="bi bi-gear nav-drawer__icon"></i>
+            <span>Settings</span>
+        </li>
+        <li class="nav-drawer__item">
+            <i class="bi bi-newspaper nav-drawer__icon"></i>
+            <span>Feed</span>
+        </li>
+    </ul>
+
+    <div class="nav-drawer__divider"></div>
+
+    <ul class="nav-drawer__links">
+        <li class="nav-drawer__item nav-drawer__item--danger">
+            <i class="bi bi-box-arrow-left nav-drawer__icon"></i>
+            <span>Log out</span>
+        </li>
+    </ul>
+
+</nav>
+
+<!--- App Header -->
 <div class="app-header">
-    <div class="app-header__banner"></div>
+    <div class="app-header__banner">
+        <!-- Hamburger menu icon-->
+         <button class="app-header__menu"
+            ng-click="$ctrl.toggleMenu()"
+            aria-label="Open navigation menu"
+            aria-expanded="{{ $ctrl.menuOpen}}">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
     <div class="app-header__profile">
         <div class="app-header__avatar">TK</div>
         <div class="app-header__info">
@@ -102,11 +160,26 @@
  </div>
 
 <!-- Empty state -->
-<div class="empty-state" ng-if="$ctrl.isEmpty() && !$ctrl.isLoading">
+<div class="empty-state" 
+    ng-if="$ctrl.isEmpty() && !$ctrl.isLoading && $ctrl.emptyReason === 'filtered'">
+    <div class="empty-state__icon">
+        <i class="bi bi-calendar-x"></i>
+    </div>
+    <p class="empty-state__text">No followers match the selected date range.</p>
+    <p class="empty-state__text" style="font-size:0.8rem; color:#bbb; margin-top:0.25rem;">
+        Try widening the date range or clearing the filter.
+    </p>
+</div>
+
+<div class="empty-state" 
+    ng-if="$ctrl.isEmpty() && !ctrl.isLoading && $ctrl.emptyReason === 'removed'">
     <div class="empty-state__icon">
         <i class="bi bi-people"></i>
     </div>
-    <p class="empty-state__text">No followers match the selected date range.</p>
+    <p class="empty-state__text">No followers remaining.</p>
+    <p class="empty-state__text" style="font-size:0.8rem; color:#bbb; margin-top:0.25rem;">
+        All followers have been removed from your list.
+    </p>
 </div>
 
 <!-- Followers Grid-->

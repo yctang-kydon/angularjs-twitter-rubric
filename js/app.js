@@ -26,8 +26,8 @@ app.component('rubricApp', {
     controller: AppController
 });
 
-AppController.$inject = ['$http', '$log'];
-function AppController($http, $log) {
+AppController.$inject = ['$http', '$log', '$document', '$scope'];
+function AppController($http, $log, $document, $scope) {
     // ViewModel pattern - using 'this' to refer to the controller instance
     const $ctrl = this; 
 
@@ -37,6 +37,12 @@ function AppController($http, $log) {
     $ctrl.filteredFollowers =[];
     $ctrl.errorMessage = null;
     $ctrl.isLoading = false;
+
+    // --- REASON FOR EMPTY LIST: 'filtered' | 'removed' | null
+    $ctrl.emptyReason = null;
+
+    // --- MENU STATE ---
+    $ctrl.menuOpen = false;
 
     // --- FILTER STATE ---
     $ctrl.startDate = null;
@@ -67,10 +73,16 @@ function AppController($http, $log) {
         }).finally(() => {
             $ctrl.isLoading = false;
         });
+
+        // Close the menu when user clicks outside the drawer.
+        // Note that this event fires outside of Angular's digest cycle so
+        // we need to wrap this in $scope.$apply so it can be detected.
+        $document.on('click', _onOutsideClick);
     };
 
     $ctrl.$onDestroy = () => {
-        // placeholder code to cleanup scope
+        // Deregister the document listener to prevent leakage
+        $document.off('click', _onOutsideClick);
     }; 
 
     // --- METHODS (USER ACTIONS) ---
@@ -116,18 +128,47 @@ function AppController($http, $log) {
         _derive();
     };
 
+    // Toggle menu drawer 
+    $ctrl.toggleMenu = () => {
+        $ctrl.menuOpen = !$ctrl.menuOpen;
+    };
+
+    // Close the drawer (either using backdrop click or X button)
+    $ctrl.closeMenu = () => {
+        $ctrl.menuOpen = false;
+    };
 
     // --- STATE CHECKS ---
 
     // Check if date range > 6 months
     $ctrl.isRangeOverSixMonths = () => {
-        // If either date is missing, we can't determine the range, so return false
-        if (!$ctrl.startDate || !$ctrl.endDate) return false;
-        if ($ctrl.endDate <= $ctrl.startDate) return false;
+        const now = new Date();
 
-        const sixMonthsLater = new Date($ctrl.startDate);
-        sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
-        return $ctrl.endDate > sixMonthsLater;
+        const sixMonthsLater = (date) => {
+            const d = new Date(date);
+            d.setMonth(d.getMonth() + 6);
+            return d;
+        };
+
+        // Start Date and End Date are specified, check the range
+        if ($ctrl.startDate && $ctrl.endDate) {
+            if ($ctrl.endDate <= $ctrl.startDate) return false;
+            return $ctrl.endDate > sixMonthsLater($ctrl.startDate);
+        }
+
+        // Only start date specified - implied end date is today
+        if ($ctrl.startDate && !$ctrl.endDate) {
+            return now > sixMonthsLater($ctrl.startDate);
+        }
+
+        // Only end date set - lower bound unknown
+        // Not possible to calculate range, hence we do not apply 6-month restriction
+        if (!$ctrl.startDate && $ctrl.endDate) {
+            return false;
+        }
+        
+        // No dates set - no restriction applied
+        return false;
     };
 
     // Check if no followers are shown
@@ -150,15 +191,44 @@ function AppController($http, $log) {
 
     // --- PRIVATE HELPERS: PURE FUNCTIONS ---
 
-    function _derive() {
-        let result = _applyDateFilter($ctrl.followers);
-        result = _applySort(result);
+    // Closes the menu when user clicks outside drawer or X button. 
+    // Uses $scope.$apply as the native DOM click element fires outside of Angular's digest cycle.
+    function _onOutsideClick(event) {
+        const drawer = document.querySelector('.nav-drawer');
+        const menu = document.querySelector('.app-header__menu');
+        if (!drawer || !menu) return;
+        if (!drawer.contains(event.target) && !menu.contains(event.target)) {
+            $scope.$apply(() => {
+                $ctrl.menuOpen = false;
+            });
+        }
+    }
 
+    // This is idempotent - safe to call after every state change.
+    // Pattern: correct state → filter → sort → assign. Never mutates inputs.
+    function _derive() {
+        // Note: To check if current date range invalidates chirpiness sorting
+        // Reset sort state BEFORE the pipeline runs so _applySort gets clean state
         if ($ctrl.isRangeOverSixMonths() && $ctrl.sortField === 'chirpiness') {
             $ctrl.sortField = null;
             $ctrl.sortAscending = true;
-            result = _applySort($ctrl.followers);
         }
+        
+        // Pipeline: Start from the masterlist, return new arrays at each step
+        // 1. Filter
+        let result = _applyDateFilter($ctrl.followers);
+        // 2. Sort the filtered result
+        result = _applySort(result);
+
+        // Track why the list is empty then show the relevant message
+        // 'removed' - master list is empty (all followers removed)
+        // 'filtered' - master list has entries but date filter matched none
+        if (result.length === 0) {
+            $ctrl.emptyReason = $ctrl.followers.length === 0 ? 'removed' : 'filtered'; 
+        } else {
+            $ctrl.emptyReason = null;
+        }
+        
         $ctrl.filteredFollowers = result;
     
     }
