@@ -67,8 +67,6 @@ function AppController($http, $log, $document, $scope, $window) {
 
     // --- LIFECYCLE HOOK ---
     $ctrl.$onInit = () => {
-        $ctrl.isLoading = true;
-
         $http.get('data/twubric.json').then((response) => {
             $ctrl.followers = response.data; 
             _derive();
