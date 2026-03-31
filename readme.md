@@ -51,14 +51,18 @@ https://yctang-kydon.github.io/angularjs-twitter-rubric/
 
 ### Testing the loading state
  
-The app loads follower data from a local JSON file, so under normal conditions the loading spinner appears only briefly. To observe it clearly:
+The app implements a minimum display time of 1.5 seconds for the loading spinner. This ensures the spinner is always visible long enough to be meaningful — on fast connections (such as cached responses on GitHub Pages) the data may load in under 50ms, which would cause the spinner to flash imperceptibly without this minimum. On slow connections the data takes longer than 1.5 seconds anyway, so no artificial delay is added.
+ 
+To observe the spinner on the live demo or locally, no special setup is needed — it will always display for at least 1.5 seconds on every page load.
+ 
+To simulate a slower connection and see the spinner for longer:
  
 1. Open Chrome DevTools (`F12` or `Cmd+Option+I`)
 2. Go to the **Network** tab
 3. Change the throttling dropdown from **"No throttling"** to **"Slow 3G"**
 4. Hard refresh the page (`Cmd+Shift+R` on Mac, `Ctrl+Shift+R` on Windows)
  
-The spinner will be visible for several seconds before the follower cards load in. Remember to set throttling back to **"No throttling"** when done — it affects all network requests in that tab.
+Remember to set throttling back to **"No throttling"** when done — it affects all network requests in that tab.
  
 ## Deployment
 

@@ -26,8 +26,8 @@ app.component('rubricApp', {
     controller: AppController
 });
 
-AppController.$inject = ['$http', '$log', '$document', '$scope', '$window'];
-function AppController($http, $log, $document, $scope, $window) {
+AppController.$inject = ['$http', '$log', '$document', '$scope', '$window', '$timeout'];
+function AppController($http, $log, $document, $scope, $window, $timeout) {
     // ViewModel pattern - using 'this' to refer to the controller instance
     const $ctrl = this; 
 
@@ -36,7 +36,7 @@ function AppController($http, $log, $document, $scope, $window) {
     $ctrl.followers = [];
     $ctrl.filteredFollowers =[];
     $ctrl.errorMessage = null;
-    $ctrl.isLoading = true;
+    $ctrl.isLoading = false;
 
     // --- REASON FOR EMPTY LIST: 'filtered' | 'removed' | null
     $ctrl.emptyReason = null;
@@ -67,13 +67,24 @@ function AppController($http, $log, $document, $scope, $window) {
 
     // --- LIFECYCLE HOOK ---
     $ctrl.$onInit = () => {
+        $ctrl.isLoading = true;
+
+        // Minimum display time for loading spinner for illustration purposes
+        const minLoadMs = 1500;
+        const loadStart = Date.now();
+
         $http.get('data/twubric.json').then((response) => {
-            $ctrl.followers = response.data; 
-            _derive();
+            const elapsed = Date.now() - loadStart;
+            const remaining = Math.max(0, minLoadMs - elapsed);
+
+            $timeout(() => {
+                $ctrl.followers = response.data; 
+                _derive();
+                $ctrl.isLoading = false;
+            }, remaining);
         }).catch((error) => {
             $log.error('Failed to load followers:', error);
             $ctrl.errorMessage = 'Failed to load followers data. Please check your connection and try again.';
-        }).finally(() => {
             $ctrl.isLoading = false;
         });
 
