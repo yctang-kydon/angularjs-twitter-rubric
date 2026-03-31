@@ -91,56 +91,79 @@
 <!-- Filter Card-->
 <div class="filter-section">
 
-    <!-- Date Filters -->
-    <div class="filter-row">
-        <span class="filter-row__label">Joined between</span>
+    <!-- Mobile-only Toggle Bar-->
+    <div class="filter-toggle-bar">
+        <button class="filter-toggle-btn"
+            ng-click="$ctrl.toggleFilters()"
+            aria-expanded="{{ $ctrl.filtersOpen }}">
+            <i class="bi bi-funnel"
+                ng-class="{'bi-full-fill': $ctrl.isFiltered() || $ctrl.sortField}"></i>
+            <span>Filters &amp; Sort</span>
+            <span class="filter-toggle-btn__badge"
+                ng-if="$ctrl.isFiltered() || $ctrl.sortField">
+                active
+            </span>
+            <i class="bi filter-toggle-btn__chevron"
+                ng-class="$ctrl.filtersOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        </button>
+    </div>
 
-        <div class="date-pill-wrap">
-            <md-datepicker
-                ng-model="$ctrl.startDate"
-                ng-change="$ctrl.applyDateFilter()"
-                md-placeholder="Start Date">
-            </md-datepicker>
-            <button class="date-clear-btn"
-                ng-if="$ctrl.startDate"
-                ng-click="$ctrl.clearDate('start')">x</button>
+    <!--- Filter Rows (Visible on Desktop, Collapsible on Mobile) -->
+    <div class="filter-collapsible" ng-show="$ctrl.filtersOpen">
+
+        <!-- Date Filters -->
+        <div class="filter-row">
+            <span class="filter-row__label">Joined between</span>
+
+            <div class="date-pill-wrap">
+                <md-datepicker
+                    ng-model="$ctrl.startDate"
+                    ng-change="$ctrl.applyDateFilter()"
+                    md-placeholder="Start Date">
+                </md-datepicker>
+                <button class="date-clear-btn"
+                    ng-if="$ctrl.startDate"
+                    ng-click="$ctrl.clearDate('start')">x</button>
+            </div>
+
+            <div class="date-pill-wrap">
+                <md-datepicker
+                    ng-model="$ctrl.endDate"
+                    ng-change="$ctrl.applyDateFilter()"
+                    md-placeholder="End Date">
+                </md-datepicker>
+                <button class="date-clear-btn"
+                    ng-if="$ctrl.endDate"
+                    ng-click="$ctrl.clearDate('end')">x</button>
+            </div>
+
         </div>
 
-        <div class="date-pill-wrap">
-            <md-datepicker
-                ng-model="$ctrl.endDate"
-                ng-change="$ctrl.applyDateFilter()"
-                md-placeholder="End Date">
-            </md-datepicker>
-            <button class="date-clear-btn"
-                ng-if="$ctrl.endDate"
-                ng-click="$ctrl.clearDate('end')">x</button>
+        <!-- Sort Field Filters -->
+        <div class="filter-row">
+            <span class="filter-row__label">Sort By</span>
+
+            <button class="sort-pill"
+            ng-repeat="option in $ctrl.sortOptions"
+            ng-class="{'sort-pill--active': $ctrl.sortField === option.field}"
+            ng-click="$ctrl.sortBy(option.field)"
+            ng-disabled="$ctrl.isSortDisabled(option.field)">
+            {{ option.field }}
+            <span ng-if="$ctrl.sortField === option.field">
+                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+            </span>
+            </button>
+
+            <!-- Reset Sort button — only shown when a sort is active -->
+            <button class="sort-pill sort-pill--reset"
+                ng-if="$ctrl.sortField"
+                ng-click="$ctrl.resetSort()">
+                ↺ Reset
+            </button>
         </div>
 
     </div>
 
-    <!-- Sort Field Filters -->
-    <div class="filter-row">
-        <span class="filter-row__label">Sort By</span>
-
-        <button class="sort-pill"
-        ng-repeat="option in $ctrl.sortOptions"
-        ng-class="{'sort-pill--active': $ctrl.sortField === option.field}"
-        ng-click="$ctrl.sortBy(option.field)"
-        ng-disabled="$ctrl.isSortDisabled(option.field)">
-        {{ option.field }}
-        <span ng-if="$ctrl.sortField === option.field">
-            {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
-        </span>
-        </button>
-
-        <!-- Reset Sort button — only shown when a sort is active -->
-        <button class="sort-pill sort-pill--reset"
-            ng-if="$ctrl.sortField"
-            ng-click="$ctrl.resetSort()">
-            ↺ Reset
-        </button>
-    </div>
 </div>
 
 <!-- Sort Warning for Chirpiness -->

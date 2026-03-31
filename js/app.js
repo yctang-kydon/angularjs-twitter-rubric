@@ -26,8 +26,8 @@ app.component('rubricApp', {
     controller: AppController
 });
 
-AppController.$inject = ['$http', '$log', '$document', '$scope'];
-function AppController($http, $log, $document, $scope) {
+AppController.$inject = ['$http', '$log', '$document', '$scope', '$window'];
+function AppController($http, $log, $document, $scope, $window) {
     // ViewModel pattern - using 'this' to refer to the controller instance
     const $ctrl = this; 
 
@@ -43,6 +43,11 @@ function AppController($http, $log, $document, $scope) {
 
     // --- MENU STATE ---
     $ctrl.menuOpen = false;
+
+    // FILTER PANEL STATE ---
+    // On desktop/tablet (>= 768px) panel is always open
+    // On mobile it starts collapsed so cards are immediately visible
+    $ctrl.filtersOpen = _isDesktop();
 
     // --- FILTER STATE ---
     $ctrl.startDate = null;
@@ -78,6 +83,9 @@ function AppController($http, $log, $document, $scope) {
         // Note that this event fires outside of Angular's digest cycle so
         // we need to wrap this in $scope.$apply so it can be detected.
         $document.on('click', _onOutsideClick);
+
+        // Keep filtersOpen in sync when window is resized across breakpoints
+        $window.addEventListener('resize', _onResize);
     };
 
     $ctrl.$onDestroy = () => {
@@ -126,6 +134,11 @@ function AppController($http, $log, $document, $scope) {
         $ctrl.sortAscending = true;
         // reapply date filter to restore original order
         _derive();
+    };
+
+    // Toggle filter panel open or close (mobile only)
+    $ctrl.toggleFilters = () => {
+        $ctrl.filtersOpen = !$ctrl.filtersOpen;
     };
 
     // Toggle menu drawer 
@@ -190,6 +203,25 @@ function AppController($http, $log, $document, $scope) {
     };
 
     // --- PRIVATE HELPERS: PURE FUNCTIONS ---
+
+    // Returns true if viewport is at desktop/tablet breakpoint (>= 768px)
+    function _isDesktop() {
+        return $window.innerWidth >= 768;
+    }
+
+    // Syncs filtersOpen when window crosses mobile/desktop breakpoint
+    // Uses $scope.$apply because resize fires outside of Angular's digest cycle
+    function _onResize() {
+        $scope.$apply(() => {
+            if (_isDesktop()) {
+                // Always open on desktop
+                $ctrl.filtersOpen = true;
+            } else if ($ctrl.filtersOpen && !$ctrl.isFiltered() && !$ctrl.sortField) {
+                // Only collapse if crossing to mobile with no active filters
+                $ctrl.filtersOpen = false;
+            }
+        });
+    }
 
     // Closes the menu when user clicks outside drawer or X button. 
     // Uses $scope.$apply as the native DOM click element fires outside of Angular's digest cycle.

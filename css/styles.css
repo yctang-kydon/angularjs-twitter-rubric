@@ -730,3 +730,68 @@
         font-size: 1.2rem;
     }
 }
+
+/* ── FILTER TOGGLE BAR (mobile only) ────────────────── */
+ 
+/* Hidden on desktop — filters always fully visible */
+.filter-toggle-bar {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    /* Show the toggle bar on mobile */
+    .filter-toggle-bar {
+        display: flex;
+        align-items: center;
+        padding: 0.1rem 0;
+    }
+ 
+    .filter-toggle-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        padding: 0.5rem 0;
+        border: none;
+        background: transparent;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #444;
+        cursor: pointer;
+        text-align: left;
+    }
+ 
+    .filter-toggle-btn:hover {
+        color: #1d9bf0;
+    }
+ 
+    /* Filled funnel icon when filters are active */
+    .filter-toggle-btn .bi-funnel-fill {
+        color: #1d9bf0;
+    }
+ 
+    /* "active" badge — small blue pill next to the label */
+    .filter-toggle-btn__badge {
+        font-size: 0.68rem;
+        font-weight: 500;
+        padding: 1px 7px;
+        border-radius: 999px;
+        background: #1d9bf0;
+        color: white;
+        line-height: 1.6;
+    }
+ 
+    /* Chevron pushed to the far right */
+    .filter-toggle-btn__chevron {
+        margin-left: auto;
+        font-size: 0.75rem;
+        color: #888;
+    }
+ 
+    /* Add a top border to the collapsible when it opens
+       to visually separate it from the toggle bar */
+    .filter-collapsible {
+        border-top: 1px solid #f0f0f0;
+        padding-top: 0.5rem;
+    }
+}
