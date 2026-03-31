@@ -36,7 +36,7 @@ function AppController($http, $log, $document, $scope, $window) {
     $ctrl.followers = [];
     $ctrl.filteredFollowers =[];
     $ctrl.errorMessage = null;
-    $ctrl.isLoading = false;
+    $ctrl.isLoading = true;
 
     // --- REASON FOR EMPTY LIST: 'filtered' | 'removed' | null
     $ctrl.emptyReason = null;
