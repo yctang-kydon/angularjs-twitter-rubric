@@ -14,7 +14,7 @@ app.filter('unixDate', () => {
         const date = new Date(timestamp * 1000);
         return date.toLocaleDateString('en-GB', {
             day: 'numeric',
-            month: 'numeric',
+            month: 'short',
             year: 'numeric'
         });
     };

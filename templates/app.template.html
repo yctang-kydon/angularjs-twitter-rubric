@@ -1,99 +1,118 @@
 <!--- Header -->
 <div class="app-header">
-    <div class="container">
-        <h1><i class="bi bi-twitter-x"></i> {{ $ctrl.title }}</h1>
-
-        <!-- Loading state-->
-        <p ng-if="$ctrl.isLoading">Loading followers...</p>
-
-        <!-- No filter active, show total -->
-        <p ng-if="!$ctrl.isLoading && !$ctrl.isFiltered()">{{ $ctrl.followers.length }} followers</p>
-
-        <!-- Filter active - show filtered out of total -->
-        <p ng-if="!$ctrl.isLoading && $ctrl.isFiltered()">
-            Showing {{ $ctrl.filteredFollowers.length }} of {{ $ctrl.followers.length }} followers</p>
-
-        <div ng-if="$ctrl.errorMessage" class="alert alert-danger mt-2">
-            {{ $ctrl.errorMessage }}
+    <div class="app-header__banner"></div>
+    <div class="app-header__profile">
+        <div class="app-header__avatar">TK</div>
+        <div class="app-header__info">
+            <h1 class="app-header__name">TeamieKydon</h1>
+            <p class="app-header__handle">@TeamieKydon</p>
+            <div class="app-header__stats">
+                <span class="app-header__stat" ng-if="$ctrl.isLoading">
+                    Loading...
+                </span>
+                <span class="app-header__stat"
+                    ng-if="!$ctrl.isLoading && !$ctrl.isFiltered()">
+                    <strong>{{ $ctrl.followers.length }}</strong> followers
+                </span>
+                <span class="app-header__stat"
+                    ng-if="!$ctrl.isLoading && $ctrl.isFiltered()">
+                    Showing <strong>{{ $ctrl.filteredFollowers.length }}</strong>
+                    of <strong>{{ $ctrl.followers.length }}</strong> followers
+                </span>
+            </div>
         </div>
+    </div>
+    <div ng-if="$ctrl.errorMessage"
+        style="background:#c0392b; color:white; padding:0.5rem 1.5rem; font-size:0.85rem;">
+        {{ $ctrl.errorMessage }}
     </div>
 </div>
 
 <!-- Main Content -->
-<div class="container my-4">
 
-    <!-- Filter Card-->
-    <div class="card mb-4 border-0 bg-light p-3">
+<!-- Filter Card-->
+<div class="filter-section">
 
-        <!-- Date Filters -->
-        <div class="mb-2">
-            <div class="d-flex flex-wrap align-items-center gap-2">
-                <strong>Joined Twitter Between</strong>
-                <div class="d-flex align-items-center gap-1">
-                    <md-datepicker
-                        ng-model="$ctrl.startDate"
-                        ng-change="$ctrl.applyDateFilter()"
-                        md-placeholder="Start Date">
-                    </md-datepicker>
-                    <button class="btn btn-sm btn-outline-secondary"
-                        ng-if="$ctrl.startDate"
-                        ng-click="$ctrl.clearDate('start')">x</button>
-                </div>
+    <!-- Date Filters -->
+    <div class="filter-row">
+        <span class="filter-row__label">Joined between</span>
 
-                <div class="d-flex align-items-center gap-1">
-                    <md-datepicker
-                        ng-model="$ctrl.endDate"
-                        ng-change="$ctrl.applyDateFilter()"
-                        md-placeholder="End Date">
-                    </md-datepicker>
-                    <button class="btn btn-sm btn-outline-secondary"
-                        ng-if="$ctrl.endDate"
-                        ng-click="$ctrl.clearDate('end')">x</button>
-                </div>
-            </div>
+        <div class="date-pill-wrap">
+            <md-datepicker
+                ng-model="$ctrl.startDate"
+                ng-change="$ctrl.applyDateFilter()"
+                md-placeholder="Start Date">
+            </md-datepicker>
+            <button class="date-clear-btn"
+                ng-if="$ctrl.startDate"
+                ng-click="$ctrl.clearDate('start')">x</button>
         </div>
 
-        <!-- Sort Field Filters -->
-        <div class="sort-buttons mb-3">
-            <strong>Sort By</strong>
-
-            <button class="btn btn-sm"
-            ng-repeat="option in $ctrl.sortOptions"
-            ng-class="{
-                'btn-dark': $ctrl.sortField === option.field,
-                'btn-outline-dark': $ctrl.sortField !== option.field}"
-            ng-click="$ctrl.sortBy(option.field)"
-            ng-disabled="$ctrl.isSortDisabled(option.field)">
-            {{ option.field }}
-            <span ng-if="$ctrl.sortField === option.field">
-                {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
-            </span>
-            </button>
-
-            <!-- Reset Sort button — only shown when a sort is active -->
-            <button class="btn btn-sm btn-outline-secondary"
-                ng-if="$ctrl.sortField"
-                ng-click="$ctrl.resetSort()">
-                Reset Sort
-            </button>
-
-            <!-- Sort Warning for Chirpiness -->
-            <div class="alert alert-warning mt-2 mb-0" 
-                ng-if="$ctrl.isRangeOverSixMonths()">
-                Chirpiness cannot be sorted for date ranges longer than 6 months.
-            </div>
+        <div class="date-pill-wrap">
+            <md-datepicker
+                ng-model="$ctrl.endDate"
+                ng-change="$ctrl.applyDateFilter()"
+                md-placeholder="End Date">
+            </md-datepicker>
+            <button class="date-clear-btn"
+                ng-if="$ctrl.endDate"
+                ng-click="$ctrl.clearDate('end')">x</button>
         </div>
 
     </div>
 
-    <!-- Empty state -->
-    <div class="text-center text-muted py-5" ng-if="$ctrl.isEmpty()">
-        <p class="mb-0">No followers match the selected date range.</p>
-    </div>
+    <!-- Sort Field Filters -->
+    <div class="filter-row">
+        <span class="filter-row__label">Sort By</span>
 
-    <!-- Followers Grid-->
-    <div class="row" ng-if="!$ctrl.isEmpty()">
-        <div class="col-12 col-sm-6 col-lg-4" 
+        <button class="sort-pill"
+        ng-repeat="option in $ctrl.sortOptions"
+        ng-class="{'sort-pill--active': $ctrl.sortField === option.field}"
+        ng-click="$ctrl.sortBy(option.field)"
+        ng-disabled="$ctrl.isSortDisabled(option.field)">
+        {{ option.field }}
+        <span ng-if="$ctrl.sortField === option.field">
+            {{ $ctrl.sortAscending ? ' ▲' : ' ▼' }}
+        </span>
+        </button>
+
+        <!-- Reset Sort button — only shown when a sort is active -->
+        <button class="sort-pill sort-pill--reset"
+            ng-if="$ctrl.sortField"
+            ng-click="$ctrl.resetSort()">
+            ↺ Reset
+        </button>
+    </div>
+</div>
+
+<!-- Sort Warning for Chirpiness -->
+<div class="chirpiness-warning" 
+    ng-if="$ctrl.isRangeOverSixMonths()">
+    Chirpiness cannot be sorted for date ranges longer than 6 months.
+</div>
+
+<!-- Followers Result Bar -->
+ <div class="result-bar" ng-if="!$ctrl.isEmpty() && !$ctrl.isLoading">
+    <span ng-if="!$ctrl.isFiltered()">
+        {{ $ctrl.followers.length }} followers
+    </span>
+    <span ng-if="$ctrl.isFiltered()">
+        {{ $ctrl.filteredFollowers.length }} of {{ $ctrl.followers.length }} followers
+    </span>
+ </div>
+
+<!-- Empty state -->
+<div class="empty-state" ng-if="$ctrl.isEmpty() && !$ctrl.isLoading">
+    <div class="empty-state__icon">
+        <i class="bi bi-people"></i>
+    </div>
+    <p class="empty-state__text">No followers match the selected date range.</p>
+</div>
+
+<!-- Followers Grid-->
+<div class="followers-grid" ng-if="!$ctrl.isEmpty()">
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4 follower-card-wrap" 
             ng-repeat="follower in $ctrl.filteredFollowers track by follower.uid">
             <follower-card
                 follower="follower"
@@ -102,5 +121,4 @@
             </follower-card>
         </div>
     </div>
-
 </div>

@@ -1,9 +1,9 @@
 [
   {
     "uid": 1,
-    "username": "sampleuser1",
+    "username": "jimhensen1",
     "image": "https://randomuser.me/api/portraits/men/1.jpg",
-    "fullname": "Sample User One",
+    "fullname": "Jim Hensen",
     "twubric": {
       "total": 3.5,
       "friends": 1,
@@ -14,9 +14,9 @@
   },
   {
     "uid": 2,
-    "username": "sampleuser2",
+    "username": "roxyfoxx2",
     "image": "https://randomuser.me/api/portraits/women/2.jpg",
-    "fullname": "Sample User Two",
+    "fullname": "Roxy Foxx",
     "twubric": {
       "total": 5,
       "friends": 1,
@@ -27,9 +27,9 @@
   },
   {
     "uid": 3,
-    "username": "sampleuser3",
+    "username": "rumihunter3",
     "image": "https://randomuser.me/api/portraits/women/3.jpg",
-    "fullname": "Sample User Three",
+    "fullname": "Rumi Jang",
     "twubric": {
       "total": 7,
       "friends": 1,
@@ -40,9 +40,9 @@
   },
   {
     "uid": 4,
-    "username": "sampleuser4",
+    "username": "jinudemon4",
     "image": "https://randomuser.me/api/portraits/men/4.jpg",
-    "fullname": "Sample User Four",
+    "fullname": "Jinu Kang",
     "twubric": {
       "total": 9,
       "friends": 2,
@@ -53,9 +53,9 @@
   },
   {
     "uid": 5,
-    "username": "sampleuser5",
+    "username": "mysterydemon5",
     "image": "https://randomuser.me/api/portraits/men/5.jpg",
-    "fullname": "Sample User Five",
+    "fullname": "Mystery Man",
     "twubric": {
       "total": 9,
       "friends": 1,
@@ -66,9 +66,9 @@
   },
   {
     "uid": 6,
-    "username": "sampleuser6",
+    "username": "abbydemon6",
     "image": "https://randomuser.me/api/portraits/men/6.jpg",
-    "fullname": "Sample User Six",
+    "fullname": "Abby Chan",
     "twubric": {
       "total": 6,
       "friends": 2,
@@ -79,9 +79,9 @@
   },
   {
     "uid": 7,
-    "username": "sampleuser7",
+    "username": "zoeyhunter7",
     "image": "https://randomuser.me/api/portraits/women/7.jpg",
-    "fullname": "Sample User Seven",
+    "fullname": "Zoey Choi",
     "twubric": {
       "total": 8,
       "friends": 2,
@@ -92,9 +92,9 @@
   },
   {
     "uid": 8,
-    "username": "sampleuser8",
+    "username": "mirahunter8",
     "image": "https://randomuser.me/api/portraits/women/8.jpg",
-    "fullname": "Sample User Eight",
+    "fullname": "Mira Lee",
     "twubric": {
       "total": 7,
       "friends": 2,
@@ -105,9 +105,9 @@
   },
   {
     "uid": 9,
-    "username": "sampleuser9",
+    "username": "romancedemon9",
     "image": "https://randomuser.me/api/portraits/men/9.jpg",
-    "fullname": "Sample User Nine",
+    "fullname": "Romance Boy",
     "twubric": {
       "total": 8,
       "friends": 1,
@@ -118,9 +118,9 @@
   },
   {
     "uid": 10,
-    "username": "sampleuser10",
+    "username": "bobby10",
     "image": "https://randomuser.me/api/portraits/men/10.jpg",
-    "fullname": "Sample User Ten",
+    "fullname": "Bobby Kim",
     "twubric": {
       "total": 5,
       "friends": 1,

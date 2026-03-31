@@ -11,36 +11,60 @@ angular.module('twitterRubricApp')
         }
     });
 
-function FollowerCardController() {
+FollowerCardController.$inject = ['$mdDialog'];
+function FollowerCardController($mdDialog) {
     const $ctrl = this;
 
     // --- STATE --- 
     // Precomputed Score Metadata - set once in $onChanges
     $ctrl.scores = null;
 
+    // State for remove icon
+    $ctrl.imageError = false;
+
     // --- LIFECYCLE ---
 
     $ctrl.$onChanges = (changes) => {
         if (changes.follower && changes.follower.currentValue) {
             $ctrl.scores = _computeScores($ctrl.follower);
+            $ctrl.imageError = false;
         }
     };
 
     $ctrl.$onDestroy = () => {
-        // placeholder for future cleanup
+        // close any open dialog if card is removed from DOM
+        $mdDialog.cancel();
     };
 
     // --- METHODS ---
 
-    $ctrl.remove = () => {
-        $ctrl.onRemove({ follower: $ctrl.follower });
-    };
+    $ctrl.initiateRemove = (event) => {
+        const confirm = $mdDialog.confirm()
+            .title(`Remove @${$ctrl.follower.username}?`)
+            .textContent(
+                `${$ctrl.follower.fullname} will be permanently removed from your follower list.`
+            )
+            .ariaLabel('Remove follower confirmation')
+            .targetEvent(event)
+            .ok('Remove')
+            .cancel('Cancel');
         
+        $mdDialog.show(confirm).then(() => {
+            $ctrl.onRemove({follower: $ctrl.follower});
+        }).catch(() => {
+            // No action if clicked on cancel or pressed Escape
+        });
+    };
+
     $ctrl.isRemoveDisabled = () => {
         return $ctrl.sortField === 'chirpiness' &&
                 $ctrl.scores && $ctrl.scores.chirpiness.label === 'High';
+            };
+    
+    $ctrl.onImageError = () => { 
+        $ctrl.imageError = true;
     };
-
+            
     // --- PRIVATE HELPERS ---
 
     function _computeScores(follower) {
@@ -60,9 +84,8 @@ function FollowerCardController() {
 
         const ratio = score / max;
         const label = ratio > 0.66 ? 'High' : ratio > 0.33 ? 'Average' : 'Low';
-        const badgeClass = label === 'High' ? 'bg-success' :
-            label === 'Average' ? 'bg-warning text-dark' : 'bg-secondary';
+        const badgeClass = label === 'High' ? 'score-badge--high' :
+            label === 'Average' ? 'score-badge--avg' : 'score-badge--low';
         return {label, badgeClass}; 
-    }
-}
-
+        }
+};

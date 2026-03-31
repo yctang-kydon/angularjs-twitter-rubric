@@ -1,88 +1,521 @@
-/* === HEADER === */
+/* ── RESET & BASE ───────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
+/* ── HEADER ─────────────────────────────────────────── */
 .app-header {
-    background: linear-gradient(135deg, #000000, #9d9d9d);
-    color: white;
-    padding: 1.5rem 0;
+    background: linear-gradient(135deg, #0f4c75 0%, #1b6ca8 25%, #1d9bf0 50%, #7856ff 80%);
+    padding: 0;
 }
 
-.app-header h1 {
-    color: white;
-    margin: 0;
+.app-header__banner {
+    height: 120px;
+    position: relative;
+    overflow: hidden;
 }
 
-.app-header p {
-    color: rgba(255,255,255,0.8);
-    margin: 0;
+.app-header__profile {
+    padding: 0 1.5rem 1rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
 }
 
-/* === CARD === */
-
-.card {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    border: none !important;
-}
-
-/* === SCORE CELLS === */
-
-.score-cell {
-    padding: 0.5rem;
-    text-align: center;
-    border-right: 1px solid #dee2e6;
-}
-
-.score-cell:last-child {
-    border-right: none;
-}
-
-.score-cell small {
-    font-size: 0.8rem;
-    white-space: nowrap;
-    display: block;
-    margin-bottom: 0.25rem;
-}
-
-.score-value {
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-/* === TOTAL SCORE CIRCLE === */
-
-.total-score {
-    background: #1a1a1a;
-    color: white;
+.app-header__avatar {
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
+    border: 4px solid #0f4c75;
+    background: linear-gradient(135deg, #1d9bf0, #7856ff);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 0.85rem;
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+    margin-top: -36px;
     flex-shrink: 0;
+    overflow: hidden;
 }
 
-/* === BADGES === */
+.app-header__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-.badge {
-    font-size: 0.75rem;
+.app-header__info {
+    flex: 1;
+    padding-bottom: 2px;
+}
+
+.app-header__name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    margin: 0;
+}
+
+.app-header__handle {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 2px 0 0;
+}
+
+.app-header__stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 6px;
+}
+
+.app-header__stat {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.app-header__stat strong {
+    color: white;
+    font-weight: 500;
+}
+
+/* ── FILTER SECTION ──────────────────────────────────── */
+.filter-section {
+    background: white;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.filter-row:last-child {
+    margin-bottom: 0;
+}
+
+.filter-row__label {
+    font-size: 0.8rem;
+    color: #666;
+    white-space: nowrap;
+    min-width: 120px;
+    font-weight: 500;
+}
+
+/* ── SORT PILLS ──────────────────────────────────────── */
+.sort-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    background: white;
+    color: #444;
+    transition: all 0.15s ease;
     white-space: nowrap;
 }
 
-/* === DATE PICKER === */
-
-.flatpickr-input {
-    min-width: 120px !important;
-    max-width: 150px !important;
+.sort-pill:hover:not(:disabled) {
+    border-color: #1d9bf0;
+    color: #1d9bf0;
 }
 
-/* === SORT BUTTONS === */
+.sort-pill--active {
+    background: #1d9bf0;
+    border-color: #1d9bf0;
+    color: white;
+}
 
-.sort-buttons {
+.sort-pill--active:hover {
+    background: #1a8cd8;
+    border-color: #1a8cd8;
+    color: white !important;
+}
+
+.sort-pill--reset {
+    background: transparent;
+    border-color: #ccc;
+    color: #888;
+}
+
+.sort-pill:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ── DATE PILLS ──────────────────────────────────────── */
+.date-pill-wrap {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    column-gap: 0.5rem;
-    row-gap: 0.5rem;
+    gap: 4px;
+}
+
+/* Override md-datepicker to look like a pill 
+.md-datepicker-input-container {
+    border-bottom: none !important;
+}
+
+.md-datepicker-input {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 999px !important;
+    padding: 4px 12px !important;
+    font-size: 0.8rem !important;
+    color: #444 !important;
+    min-width: 110px !important;
+    max-width: 130px !important;
+}
+*/
+
+/* Clear button next to date */
+.date-clear-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    background: white;
+    color: #888;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.date-clear-btn:hover {
+    background: #fee;
+    border-color: #ffb3b3;
+    color: #cc0000;
+}
+
+/* ── RESULT BAR ──────────────────────────────────────── */
+.result-bar {
+    background: #f8f9fa;
+    padding: 0.4rem 1rem;
+    font-size: 0.78rem;
+    color: #666;
+    border-bottom: 1px solid #e7e7e7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ── WARNING ALERT ───────────────────────────────────── */
+.chirpiness-warning {
+    background: #fff8e1;
+    border-left: 3px solid #ffc107;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: #856404;
+}
+
+/* ── EMPTY STATE ─────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: #aaa;
+}
+
+.empty-state__icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.empty-state__text {
+    font-size: 0.95rem;
+}
+
+/* ── CARD GRID ───────────────────────────────────────── */
+.followers-grid {
+    padding: 1rem;
+    background: #f0f2f5;
+    min-height: 200px;
+}
+
+/* ── FOLLOWER CARD ───────────────────────────────────── */
+.follower-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 0.5px solid rgba(0,0,0,0.06);
+    margin-bottom: 0;
+}
+
+/* Card banner — gradient background, portrait photo fills it */
+.follower-card__banner {
+    height: 64px;
+    position: relative;
+    overflow: hidden;
+    background-color: #1b6ca8;
+    background-image: linear-gradient(135deg, #1b6ca8, #7856ff);
+    background-size: cover;
+    border-radius: 12px 12px 0 0;
+    z-index: 0;
+}
+
+/* Total score bubble — top right of banner */
+.follower-card__score {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+}
+
+.follower-card__score-label-tiny {
+    display: block;
+    font-size: 0.5rem;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+/* Avatar overlapping banner */
+.follower-card__identity {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 10px 6px;
+}
+
+.follower-card__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid white;
+    overflow: hidden;
+    margin-top: -24px;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1; 
+}
+
+.follower-card__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.follower-card__avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+}
+
+.follower-card__names {
+    min-width: 0;
+    padding-top: 4px;
+}
+
+.follower-card__name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.follower-card__handle {
+    font-size: 0.72rem;
+    color: #888;
+}
+
+/* Score cells */
+.follower-card__scores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 0.5px solid #f0f0f0;
+    border-bottom: 0.5px solid #f0f0f0;
+    margin: 0 10px;
+}
+
+.follower-card__score-cell {
+    padding: 6px 4px;
+    text-align: center;
+    border-right: 0.5px solid #f0f0f0;
+}
+
+.follower-card__score-cell:last-child {
+    border-right: none;
+}
+
+.follower-card__score-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.follower-card__score-label {
+    font-size: 0.65rem;
+    color: #aaa;
+    display: block;
+    margin: 2px 0;
+}
+
+/* Badges */
+.score-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 1px 6px;
+    border-radius: 999px;
+}
+
+.score-badge--high {
+    background: #d4edda;
+    color: #155724;
+}
+
+.score-badge--avg {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.score-badge--low {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+/* Footer */
+.follower-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+}
+
+.follower-card__date {
+    font-size: 0.72rem;
+    color: #aaa;
+}
+
+.follower-card__remove {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid #ffb3b3;
+    background: #fff0f0;
+    color: #cc0000;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.follower-card__remove:hover:not(:disabled) {
+    background: #cc0000;
+    color: white;
+    border-color: #cc0000;
+}
+
+.follower-card__remove:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.follower-card__confirm {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.follower-card__confirm-yes,
+.follower-card__confirm-no {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: all 0.15s ease;
+}
+
+.follower-card__confirm-yes {
+    background: #d4edda;
+    color: #155724;
+}
+
+.follower-card__confirm-yes:hover {
+    background: #155724;
+    color: white;
+}
+
+.follower-card__confirm-no {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.follower-card__confirm-no:hover {
+    background: #383d41;
+    color: white;
+}
+
+/* ── ANIMATIONS — ngAnimate hooks ────────────────────── */
+/* ng-repeat remove: fade + collapse */
+.follower-card-wrap.ng-leave {
+    transition: all 0.35s ease;
+    opacity: 1;
+    transform: scale(1);
+    max-height: 300px;
+}
+
+.follower-card-wrap.ng-leave-active {
+    opacity: 0;
+    transform: scale(0.92);
+    max-height: 0;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+/* ng-repeat enter: fade in */
+.follower-card-wrap.ng-enter {
+    transition: opacity 0.25s ease;
+    opacity: 0;
+}
+
+.follower-card-wrap.ng-enter-active {
+    opacity: 1;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 576px) {
+    .app-header__banner {
+        height: 90px;
+    }
+    .app-header__avatar {
+        width: 60px;
+        height: 60px;
+        margin-top: -30px;
+    }
+    .filter-row__label {
+        min-width: 70px;
+    }
 }
